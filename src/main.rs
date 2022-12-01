@@ -3,7 +3,20 @@ mod model;
 mod repository;
 
 use actix_web::{get, App, HttpResponse, HttpServer, Responder, web::Data};
-use api::student_api::{create_student, get_student, update_student, delete_student, get_all_students};
+use api::student_api::{
+    create_student, 
+    get_student, 
+    update_student, 
+    delete_student, 
+    get_all_students
+};
+use api::evaluation_api::{
+    create_evaluation,
+    get_evaluation,
+    update_evaluation,
+    delete_evaluation,
+    get_all_evaluations,
+};
 use repository::mongo_repo::MongoRepo;
 
 #[get("/")]
@@ -24,6 +37,11 @@ async fn main() -> std::io::Result<()> {
             .service(update_student)
             .service(delete_student)
             .service(get_all_students)
+            .service(create_evaluation)
+            .service(get_evaluation)
+            .service(update_evaluation)
+            .service(delete_evaluation)
+            .service(get_all_evaluations)
     })
     .bind(("127.0.0.1", 8080))?
     .run()
