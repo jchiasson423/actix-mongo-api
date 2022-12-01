@@ -194,5 +194,86 @@ impl MongoRepo {
         }
         Ok(evalutations)
     }
-    
+
+    /**
+     * Notes
+     */
+    pub async fn get_note(&self, student_id: &String, evaluation_id: &String) -> Result<Note, Error> {
+        let filter = doc! {"student_id": student_id, "evaluation_id": evaluation_id};
+        let note_detail = self
+            .col_note
+            .find_one(filter, None)
+            .await
+            .ok()
+            .expect("Error getting note's detail");
+        Ok(note_detail.unwrap())
+    }
+
+    pub async fn create_note(&self, new_note:Note) -> Result<InsertOneResult, Error> {
+        let new_doc = Note {
+            id: None,
+            student_id: new_note.student_id,
+            evaluation_id: new_note.evaluation_id,
+            note: new_note.note,
+        };
+        let note = self
+            .col_note
+            .insert_one(new_doc, None)
+            .await
+            .ok()
+            .expect("Error creating note");
+        Ok(note)
+    }
+
+    pub async fn update_note(&self, id: &String, new_note:Note) -> Result<UpdateResult, Error> {
+        let obj_id = ObjectId::parse_str(id).unwrap();
+        let filter = doc! {"_id": obj_id};
+        let new_doc = doc! {
+            "$set":
+                {
+                    "id": new_note.id,
+                    "note": new_note.note
+                },
+        };
+        let updated_doc = self
+            .col_note
+            .update_one(filter, new_doc, None)
+            .await
+            .ok()
+            .expect("Error updating note");
+        Ok(updated_doc)
+    }
+
+    pub async fn delete_note(&self, id: &String) -> Result<DeleteResult, Error> {
+        let obj_id = ObjectId::parse_str(id).unwrap();
+        let filter = doc! {"_id": obj_id};
+        let evaluation_detail = self
+            .col_note
+            .delete_one(filter, None)
+            .await
+            .ok()
+            .expect("Error deleting note");
+        Ok(evaluation_detail)
+    }
+
+    pub async fn get_all_notes(&self, evaluation_id: &String) -> Result<Vec<Note>, Error> {
+        let filter = doc! {"evaluation_id": evaluation_id};
+        let mut cursors = self
+            .col_note
+            .find(filter, None)
+            .await
+            .ok()
+            .expect("Error getting list of notes");
+        let mut notes: Vec<Note> = Vec::new();
+        while let Some(note) = cursors
+            .try_next()
+            .await
+            .ok()
+            .expect("Error mapping through cursor")
+        {
+            notes.push(note)
+        }
+        Ok(notes)
+    }
+
 }
