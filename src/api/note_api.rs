@@ -1,3 +1,4 @@
+//Importation des modules
 use crate::{model::note_model::Note, repository::mongo_repo::MongoRepo};
 use actix_web::{
     post,
@@ -6,6 +7,7 @@ use actix_web::{
 };
 use mongodb::bson::oid::ObjectId;
 
+//Route pour créer une note
 #[post("/note")]
 pub async fn create_note(db: Data<MongoRepo>, new_note: Json<Note>) -> HttpResponse {
     let data = Note {
@@ -22,6 +24,7 @@ pub async fn create_note(db: Data<MongoRepo>, new_note: Json<Note>) -> HttpRespo
     }
 }
 
+//Route pour aller chercher une note par étudiant et évaluation
 #[get("/note/eval/{student_id}/{evaluation_id}")]
 pub async fn get_note_for_student_eval(db: Data<MongoRepo>, path: Path<(String,String)>) -> HttpResponse {
     let (student_id, evaluation_id) = path.into_inner();
@@ -39,6 +42,7 @@ pub async fn get_note_for_student_eval(db: Data<MongoRepo>, path: Path<(String,S
     }
 }
 
+//Route pour aller chercher une note par id
 #[get("/note/{id}")]
 pub async fn get_note(db: Data<MongoRepo>, path: Path<String>) -> HttpResponse {
     let id = path.into_inner();
@@ -52,6 +56,7 @@ pub async fn get_note(db: Data<MongoRepo>, path: Path<String>) -> HttpResponse {
     }
 }
 
+//Route pour modifier une note par id
 #[put("/note/{id}")]
 pub async fn update_note(
     db: Data<MongoRepo>,
@@ -86,6 +91,7 @@ pub async fn update_note(
     }
 }
 
+//Route pour supprimer une note par id
 #[delete("/note/{id}")]
 pub async fn delete_note(db: Data<MongoRepo>, path: Path<String>) -> HttpResponse {
     let id = path.into_inner();
@@ -105,6 +111,7 @@ pub async fn delete_note(db: Data<MongoRepo>, path: Path<String>) -> HttpRespons
     }
 }
 
+//Route pour aller chercher toutes les notes d'une évaluation
 #[get("/notes/{evaluation_id}")]
 pub async fn get_all_notes(db: Data<MongoRepo>, path: Path<String>) -> HttpResponse {
     let evaluation_id = path.into_inner();

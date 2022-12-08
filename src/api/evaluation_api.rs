@@ -1,3 +1,4 @@
+//Importation des modules
 use crate::{model::evaluation_model::Evaluation, repository::mongo_repo::MongoRepo};
 use actix_web::{
     post,
@@ -6,6 +7,7 @@ use actix_web::{
 };
 use mongodb::bson::oid::ObjectId;
 
+//Route pour créer une évaluation
 #[post("/evaluation")]
 pub async fn create_evaluation(db: Data<MongoRepo>, new_evaluation: Json<Evaluation>) -> HttpResponse {
     let data = Evaluation {
@@ -20,6 +22,7 @@ pub async fn create_evaluation(db: Data<MongoRepo>, new_evaluation: Json<Evaluat
     }
 }
 
+//Route pour aller chercher une évaluation par id
 #[get("/evaluation/{id}")]
 pub async fn get_evaluation(db: Data<MongoRepo>, path: Path<String>) -> HttpResponse {
     let id = path.into_inner();
@@ -33,6 +36,7 @@ pub async fn get_evaluation(db: Data<MongoRepo>, path: Path<String>) -> HttpResp
     }
 }
 
+//Route pour modifier une évaluation par id
 #[put("/evaluation/{id}")]
 pub async fn update_evaluation(
     db: Data<MongoRepo>,
@@ -65,6 +69,7 @@ pub async fn update_evaluation(
     }
 }
 
+//Route pour supprimer une évaluation par id
 #[delete("/evaluation/{id}")]
 pub async fn delete_evaluation(db: Data<MongoRepo>, path: Path<String>) -> HttpResponse {
     let id = path.into_inner();
@@ -84,6 +89,7 @@ pub async fn delete_evaluation(db: Data<MongoRepo>, path: Path<String>) -> HttpR
     }
 }
 
+//Route pour avoir toutes les évaluations
 #[get("/evaluation")]
 pub async fn get_all_evaluations(db: Data<MongoRepo>) -> HttpResponse {
     let evaluations = db.get_all_evaluations().await;

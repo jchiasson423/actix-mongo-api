@@ -1,3 +1,4 @@
+//Importation des modules
 extern crate dotenv;
 use dotenv::dotenv;
 use futures::stream::TryStreamExt;
@@ -8,6 +9,7 @@ use mongodb::{
 };
 use crate::{model::{student_model::Student, evaluation_model::Evaluation, note_model::Note}};
 
+//Repository qui va communiquer avec la bf
 pub struct MongoRepo {
     col_student: Collection<Student>,
     col_evaluation: Collection<Evaluation>,
@@ -32,7 +34,7 @@ impl MongoRepo {
     /**
      * Etudiants
      */
-
+    //Crée un étudiant
     pub async fn create_student(&self, new_student:Student) -> Result<InsertOneResult, Error> {
         let new_doc = Student {
             id: None,
@@ -47,7 +49,7 @@ impl MongoRepo {
             .expect("Error creating student");
         Ok(student)
     }
-
+    //Obtient un étudiant par id
     pub async fn get_student(&self, id: &String) -> Result<Student, Error> {
         let obj_id = ObjectId::parse_str(id).unwrap();
         let filter = doc! {"_id": obj_id};
@@ -59,7 +61,7 @@ impl MongoRepo {
             .expect("Error getting student's detail");
         Ok(student_detail.unwrap())
     }
-
+    //Met à jour un étudiant par id
     pub async fn update_student(&self, id: &String, new_student:Student) -> Result<UpdateResult, Error> {
         let obj_id = ObjectId::parse_str(id).unwrap();
         let filter = doc! {"_id": obj_id};
@@ -79,7 +81,7 @@ impl MongoRepo {
             .expect("Error updating student");
         Ok(updated_doc)
     }
-
+    //Supprime un étudiant par id
     pub async fn delete_student(&self, id: &String) -> Result<DeleteResult, Error> {
         let obj_id = ObjectId::parse_str(id).unwrap();
         let filter = doc! {"_id": obj_id};
@@ -91,7 +93,7 @@ impl MongoRepo {
             .expect("Error deleting student");
         Ok(student_detail)
     }
-
+    //Obtiens tous les étudiants
     pub async fn get_all_students(&self) -> Result<Vec<Student>, Error> {
         let mut cursors = self
             .col_student
@@ -115,7 +117,7 @@ impl MongoRepo {
     /**
      * Évaluations
      */
-
+    //Crée une évaluation
     pub async fn create_evaluation(&self, new_evalutation:Evaluation) -> Result<InsertOneResult, Error> {
         let new_doc = Evaluation {
             id: None,
@@ -130,7 +132,7 @@ impl MongoRepo {
             .expect("Error creating evalutation");
         Ok(student)
     }
-
+    //obtient une évaluation par id
     pub async fn get_evaluation(&self, id: &String) -> Result<Evaluation, Error> {
         let obj_id = ObjectId::parse_str(id).unwrap();
         let filter = doc! {"_id": obj_id};
@@ -142,7 +144,7 @@ impl MongoRepo {
             .expect("Error getting evalutation's detail");
         Ok(evaluation_detail.unwrap())
     }
-
+    //Modifie une évaluation par id
     pub async fn update_evaluation(&self, id: &String, new_evaluation:Evaluation) -> Result<UpdateResult, Error> {
         let obj_id = ObjectId::parse_str(id).unwrap();
         let filter = doc! {"_id": obj_id};
@@ -162,7 +164,7 @@ impl MongoRepo {
             .expect("Error updating evalutation");
         Ok(updated_doc)
     }
-
+    //Supprime une évaluation par id
     pub async fn delete_evaluation(&self, id: &String) -> Result<DeleteResult, Error> {
         let obj_id = ObjectId::parse_str(id).unwrap();
         let filter = doc! {"_id": obj_id};
@@ -174,7 +176,7 @@ impl MongoRepo {
             .expect("Error deleting evalutation");
         Ok(evaluation_detail)
     }
-
+    //Obtiens toutes les évaluations
     pub async fn get_all_evaluations(&self) -> Result<Vec<Evaluation>, Error> {
         let mut cursors = self
             .col_evaluation
@@ -197,6 +199,7 @@ impl MongoRepo {
     /**
      * Notes
      */
+    //Obtient la note d'un étudiant pour une évaluation
     pub async fn get_note_for_student_eval(&self, student_id: &String, evaluation_id: &String) -> Result<Note, Error> {
         let filter = doc! {"student_id": student_id, "evaluation_id": evaluation_id};
         let note_detail = self
@@ -207,7 +210,7 @@ impl MongoRepo {
             .expect("Error getting note's detail");
         Ok(note_detail.unwrap())
     }
-
+    //Obtient une note par id
     pub async fn get_note(&self, id: &String) -> Result<Note, Error> {
         let obj_id = ObjectId::parse_str(id).unwrap();
         let filter = doc! {"_id": obj_id};
@@ -219,7 +222,7 @@ impl MongoRepo {
             .expect("Error getting note's detail");
         Ok(note_detail.unwrap())
     }
-
+    //Crée une note
     pub async fn create_note(&self, new_note:Note) -> Result<InsertOneResult, Error> {
         let new_doc = Note {
             id: None,
@@ -235,7 +238,7 @@ impl MongoRepo {
             .expect("Error creating note");
         Ok(note)
     }
-
+    //Modifie une note par id
     pub async fn update_note(&self, id: &String, new_note:Note) -> Result<UpdateResult, Error> {
         let obj_id = ObjectId::parse_str(id).unwrap();
         let filter = doc! {"_id": obj_id};
@@ -254,7 +257,7 @@ impl MongoRepo {
             .expect("Error updating note");
         Ok(updated_doc)
     }
-
+    //Supprime une note par id
     pub async fn delete_note(&self, id: &String) -> Result<DeleteResult, Error> {
         let obj_id = ObjectId::parse_str(id).unwrap();
         let filter = doc! {"_id": obj_id};
@@ -266,7 +269,7 @@ impl MongoRepo {
             .expect("Error deleting note");
         Ok(evaluation_detail)
     }
-
+    //Obtiens toutes les notes d'une évaluation
     pub async fn get_all_notes(&self, evaluation_id: &String) -> Result<Vec<Note>, Error> {
         let filter = doc! {"evaluation_id": evaluation_id};
         let mut cursors = self

@@ -1,7 +1,9 @@
+//Inclusion des namespace
 mod api;
 mod model;
 mod repository;
 
+//Inclusion des modules utilis«s
 use actix_web::{get, App, HttpResponse, HttpServer, Responder, web::Data};
 use api::student_api::{
     create_student, 
@@ -27,18 +29,24 @@ use api::note_api::{
 };
 use repository::mongo_repo::MongoRepo;
 
+//Route principale
 #[get("/")]
 async fn index() -> impl Responder {
-    HttpResponse::Ok().json("Hello from rust and patate")
+    HttpResponse::Ok().json("Api en Rust pour le cours de Technologies émergentes - par Jonathan  Chiasson")
 }
 
+//Programme principal
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    //init du repo pour la bd
     let db = MongoRepo::init().await;
     let db_data = Data::new(db);
+    //Init du server http
     HttpServer::new(move || {
         App::new()
+        //Ajout des données de la bd pour être partages partout
             .app_data(db_data.clone())
+        //Ajout de toutes les routes
             .service(index)
             .service(create_student)
             .service(get_student) 
@@ -57,6 +65,7 @@ async fn main() -> std::io::Result<()> {
             .service(delete_note)
             .service(get_all_notes)
     })
+    //Attache au port et démarrage
     .bind(("127.0.0.1", 8080))?
     .run()
     .await

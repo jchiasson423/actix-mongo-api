@@ -1,3 +1,4 @@
+//Importation des modules
 use crate::{model::student_model::Student, repository::mongo_repo::MongoRepo};
 use actix_web::{
     post,
@@ -6,6 +7,7 @@ use actix_web::{
 };
 use mongodb::bson::oid::ObjectId;
 
+//Route pour ajouter un étudiant
 #[post("/student")]
 pub async fn create_student(db: Data<MongoRepo>, new_student: Json<Student>) -> HttpResponse {
     let data = Student {
@@ -20,6 +22,7 @@ pub async fn create_student(db: Data<MongoRepo>, new_student: Json<Student>) -> 
     }
 }
 
+//Route pour aller chercher un étudiant par id
 #[get("/student/{id}")]
 pub async fn get_student(db: Data<MongoRepo>, path: Path<String>) -> HttpResponse {
     let id = path.into_inner();
@@ -33,6 +36,7 @@ pub async fn get_student(db: Data<MongoRepo>, path: Path<String>) -> HttpRespons
     }
 }
 
+//Route pour modifier un étudiant par id
 #[put("/student/{id}")]
 pub async fn update_student(
     db: Data<MongoRepo>,
@@ -65,6 +69,7 @@ pub async fn update_student(
     }
 }
 
+//Route pour supprimer un étudiant par id
 #[delete("/student/{id}")]
 pub async fn delete_student(db: Data<MongoRepo>, path: Path<String>) -> HttpResponse {
     let id = path.into_inner();
@@ -84,6 +89,7 @@ pub async fn delete_student(db: Data<MongoRepo>, path: Path<String>) -> HttpResp
     }
 }
 
+//Route pour avoir tous les étudiants
 #[get("/student")]
 pub async fn get_all_students(db: Data<MongoRepo>) -> HttpResponse {
     let students = db.get_all_students().await;
