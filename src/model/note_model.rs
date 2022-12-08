@@ -1,5 +1,5 @@
 //Importation des modules
-use mongodb::bson::{oid::ObjectId, Decimal128};
+use mongodb::bson::{oid::ObjectId};
 use serde::{Serialize, Deserialize};
 
 //Structure pour note
@@ -9,5 +9,5 @@ pub struct Note {
     pub id: Option<ObjectId>,
     pub student_id: String,
     pub evaluation_id: String,
-    pub note: Decimal128,
+    pub note: i32,
 }
