@@ -28,7 +28,7 @@ pub async fn get_student(db: Data<MongoRepo>, path: Path<String>) -> HttpRespons
     }
     let student_detail = db.get_student(&id).await;
     match student_detail {
-        Ok(user) => HttpResponse::Ok().json(user),
+        Ok(student) => HttpResponse::Ok().json(student),
         Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
     }
 }

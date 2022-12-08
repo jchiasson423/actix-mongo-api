@@ -15,7 +15,15 @@ use api::evaluation_api::{
     get_evaluation,
     update_evaluation,
     delete_evaluation,
-    get_all_evaluations,
+    get_all_evaluations
+};
+use api::note_api::{
+    create_note,
+    get_note,
+    get_note_for_student_eval,
+    update_note,
+    delete_note,
+    get_all_notes
 };
 use repository::mongo_repo::MongoRepo;
 
@@ -42,6 +50,12 @@ async fn main() -> std::io::Result<()> {
             .service(update_evaluation)
             .service(delete_evaluation)
             .service(get_all_evaluations)
+            .service(create_note)
+            .service(get_note)
+            .service(get_note_for_student_eval)
+            .service(update_note)
+            .service(delete_note)
+            .service(get_all_notes)
     })
     .bind(("127.0.0.1", 8080))?
     .run()

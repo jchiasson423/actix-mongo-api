@@ -28,7 +28,7 @@ pub async fn get_evaluation(db: Data<MongoRepo>, path: Path<String>) -> HttpResp
     }
     let evaluation_detail = db.get_evaluation(&id).await;
     match evaluation_detail {
-        Ok(user) => HttpResponse::Ok().json(user),
+        Ok(evaluation) => HttpResponse::Ok().json(evaluation),
         Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
     }
 }

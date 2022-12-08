@@ -1,4 +1,3 @@
-use std::env;
 extern crate dotenv;
 use dotenv::dotenv;
 use futures::stream::TryStreamExt;
@@ -135,13 +134,13 @@ impl MongoRepo {
     pub async fn get_evaluation(&self, id: &String) -> Result<Evaluation, Error> {
         let obj_id = ObjectId::parse_str(id).unwrap();
         let filter = doc! {"_id": obj_id};
-        let student_detail = self
+        let evaluation_detail = self
             .col_evaluation
             .find_one(filter, None)
             .await
             .ok()
             .expect("Error getting evalutation's detail");
-        Ok(student_detail.unwrap())
+        Ok(evaluation_detail.unwrap())
     }
 
     pub async fn update_evaluation(&self, id: &String, new_evaluation:Evaluation) -> Result<UpdateResult, Error> {
@@ -198,8 +197,20 @@ impl MongoRepo {
     /**
      * Notes
      */
-    pub async fn get_note(&self, student_id: &String, evaluation_id: &String) -> Result<Note, Error> {
+    pub async fn get_note_for_student_eval(&self, student_id: &String, evaluation_id: &String) -> Result<Note, Error> {
         let filter = doc! {"student_id": student_id, "evaluation_id": evaluation_id};
+        let note_detail = self
+            .col_note
+            .find_one(filter, None)
+            .await
+            .ok()
+            .expect("Error getting note's detail");
+        Ok(note_detail.unwrap())
+    }
+
+    pub async fn get_note(&self, id: &String) -> Result<Note, Error> {
+        let obj_id = ObjectId::parse_str(id).unwrap();
+        let filter = doc! {"_id": obj_id};
         let note_detail = self
             .col_note
             .find_one(filter, None)
