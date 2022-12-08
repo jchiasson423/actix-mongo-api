@@ -5,6 +5,7 @@ mod repository;
 
 //Inclusion des modules utilis«s
 use actix_web::{get, App, HttpResponse, HttpServer, Responder, web::Data};
+//Module de routes des étudiants
 use api::student_api::{
     create_student, 
     get_student, 
@@ -12,6 +13,7 @@ use api::student_api::{
     delete_student, 
     get_all_students
 };
+//Module de route des évaluations
 use api::evaluation_api::{
     create_evaluation,
     get_evaluation,
@@ -19,6 +21,7 @@ use api::evaluation_api::{
     delete_evaluation,
     get_all_evaluations
 };
+//Module de routes des notes
 use api::note_api::{
     create_note,
     get_note,
@@ -27,6 +30,7 @@ use api::note_api::{
     delete_note,
     get_all_notes
 };
+//Repo mongodb
 use repository::mongo_repo::MongoRepo;
 
 //Route principale
