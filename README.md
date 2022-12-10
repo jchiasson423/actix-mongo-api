@@ -10,3 +10,6 @@
 4. Lancer la commande "cargo run" dans le même terminal pour lancer l'api.
 
 Votre API en Rust est maintenant prêt aux tests! L'API est connecté sur une base de données en ligne contenant déjà quelques données pour les tests.
+
+# Documentation du projet
+Le document d'analyse du projet se trouve dans le dossier "Documentation" à la racine du projet.
