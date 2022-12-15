@@ -13,3 +13,6 @@ Votre API en Rust est maintenant prêt aux tests! L'API est connecté sur une ba
 
 # Documentation du projet
 Le document d'analyse du projet se trouve dans le dossier "Documentation" à la racine du projet.
+
+# Tests du projet
+La description des tests fonctionnels se trouve dans le dossier /src/dev. C'est aussi dans ce dossier que vous trouverez les tests unitaires.
